@@ -1,0 +1,3 @@
+pi7db==0.3.8
+beautifulsoup4
+pandas

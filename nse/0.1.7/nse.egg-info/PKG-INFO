@@ -1,0 +1,421 @@
+Metadata-Version: 2.1
+Name: nse
+Version: 0.1.7
+Summary: Get Live Data From Nse And Filter It According To Your Choice
+Home-page: https://github.com/shivjeetbhullar/nse
+Author: Shivjeet Singh Bhullar
+Author-email: bhullarshivjeet@gmail.com
+License: UNKNOWN
+Description: # NSE Data With Python
+        #### Last Update: 11 July 2020
+        <div align="center">
+        <img src="https://drive.google.com/uc?export=view&id=1Fpa8_HJirD9DHbkxYFieYTXZc7uZyggi" >
+        <p>Python NSE Scraper</p>
+        </div>
+        
+        ## Introduction
+        **NSE Scraper** provide live data, historical data, marginal calculator, all daily archives from NSE. Also Data can be filter according to your choice with the help of [**pi7db**](https://pypi.org/project/pi7db/)  or **Pandas**.
+        Data analysie with **Bar & Linear** graph.
+        
+        ## Features
+        
+         - Live Data.
+         - Historical Data.
+         - Marginal Calculator.
+         - Capture Data Of Multiple Companies.
+         - Daily Archives (Download Or Filter).
+         - Data Filter Using ("String Filter", "OR Filter", "AND Filter ", "LESS THAN", "GREATER THAN",etc).
+         - Data Analyse Using Graphs.
+         - Export Data To Pandas Library.
+         - Write Filtered Data to CSV  File.
+        
+        ## INSTALLATION With PIP
+        ### Linux
+        On Linux pip3 is used for install nse.
+        ```shell
+        pip3 install nse
+        ```
+        ### Windows
+        On windows pip is used for install nse.
+        ```shell
+        pip install nse
+        ```
+        ## NSE Live Data
+        ```python 
+           from nse import Nse
+           db = Nse()
+           
+           data = db.live("HDFCBANK")   
+           print(data)
+        ```
+        ### Output
+        This Will Return a Dict. 
+        ```json
+        {
+          "tradedDate": "09JUL2020",
+          "otherSeries": [
+            "EQ"
+          ],
+          "lastUpdateTime": "09-JUL-2020 15:59:59",
+          "pricebandupper": 120.6,
+          "symbol": "OIL",
+          "applicableMargin": 40,
+          "adhocMargin": 15.17,
+          "companyName": "Oil India Limited",
+          "marketType": "N",
+          "exDate": "20-FEB-20",
+          "css_status_desc": "Listed",
+          "dayHigh": 102,
+          "basePrice": 100.5,
+          "securityVar": 21.33,
+          "pricebandlower": 80.4,
+          "cm_adj_high_dt": "10-JUL-19",
+          "dayLow": 100.1,
+          "quantityTraded": 898825,
+          "pChange": 1.24,
+          "totalTradedValue": 909.79,
+          "deliveryToTradedQuantity": 56.87,
+          "totalBuyQuantity": 1075,
+          "averagePrice": 101.22,
+          "cm_ffm": 3634,
+          "purpose": "INTERIM DIVIDEND - RS 9 PER SHARE",
+          "secDate": "09-Jul-2020 00:00:00",
+          "buyPrice1": 101.55,
+          "high52": 179.15,
+          "previousClose": 100.5,
+          "low52": 63.5,
+          "recordDate": "24-FEB-20",
+          "deliveryQuantity": 511125,
+          "priceBand": 20,
+          "extremeLossMargin": 3.5,
+          "cm_adj_low_dt": "13-MAR-20",
+          "varMargin": 21.33,
+          "totalTradedVolume": 898825,
+          "change": 1.25,
+          "isExDateFlag": false,
+          "buyQuantity1": 1075,
+          "series": "EQ",
+          "faceValue": 10,
+          "closePrice": 101.55,
+          "open": 100.7,
+          "isinCode": "INE274J01014",
+          "lastPrice": 101.75
+        }
+        ```
+        **lastPrice** is Stock Price Of **HDFCBANK**.
+        
+        ## Capture Live Data  And Load Data
+        `nse.capture(SYMBOL,MINUTE)` Function Is Used For Capture Data.
+        `nse.load(SYMBOL)` Function Is Used For Read Captured Data.
+        ```python 
+           from nse import Nse
+           db = Nse()
+           # Capture HDFCBANK Live Data For 5 Minutes
+           db.capture("HDFCBANK",5)   
+           #Load Captured Data Of HDFCBANK
+           data = db.load('HDFCBANK')
+           print(data)
+           
+        ```
+        ### Output
+        ```shell 
+        CAPTURING......HDFCBANK
+        CAPTURING......HDFCBANK
+        CAPTURING......HDFCBANK
+        CAPTURING......HDFCBANK
+        CAPTURING......HDFCBANK
+        CAPTURING......HDFCBANK
+        CAPTURING......HDFCBANK
+        CAPTURING......HDFCBANK
+        Success!
+        ```
+        ## Capture Multiple Brands Live Data 
+        `nse.capture([SYMBOL,SYMBOL],MINUTE)` Function Is Used For Capture Data From Multiple Brands At One Time.
+        `nse.load()` Function Is Used For Read Captured Data.
+        ```python 
+           from nse import Nse
+           db = Nse()
+           # Capture HDFCBANK Live Data For 5 Minutes
+           db.capture(["HDFCBANK","OIL","MARUTI"],5)   
+           #Load All Captured Data
+           data = db.load()
+           print(data)
+           
+        ```
+        ### Output
+        ```shell 
+        CAPTURING......HDFCBANK
+        CAPTURING......OIL
+        CAPTURING......MARUTI
+        CAPTURING......HDFCBANK
+        CAPTURING......OIL
+        CAPTURING......MARUTI
+        CAPTURING......HDFCBANK
+        CAPTURING......OIL
+        Success!
+        ```
+        
+        ## Delete Old Captured Data
+        `nse.capture(SYMBOL,MINUTE,new=True)` Function Is Used For Capture Data And Delete Old Captured Data.
+        ```python 
+           from nse import Nse
+           db = Nse()
+           # Capture HDFCBANK & OIL Live Data For 5 Minutes
+           db.capture(["HDFCBANK","OIL"],5,new=True)   
+           #Load All Captured Data.
+           data = db.load()
+           print(data)
+           ```
+           
+           ## Bar Graph View Of Captured data.
+           `db.bar(data)` Function Is Used For Get Bar Grap Of Captured Or Other Data. For Example:-
+           ```python
+           from nse import Nse
+           db = Nse()
+           #Load OIL Brand Data.
+           data = db.load('OIL')
+           #Bar Grap Of Data
+           db.bar(data)
+           ```
+           ### Output:
+        
+           <div align="center">
+        <img src="https://drive.google.com/uc?export=view&id=1U7QAf_6SBwzGFT_IYaAadPFkXoVIZBrE" >
+        <p>Bar Graph OIL Brand</p>
+        </div>
+        
+           ## Linear Graph View Of Captured data.
+           `db.bar(data)` Function Is Used For Get Linear Grap Of Captured Or Other Data. For Example:-
+           ```python
+           from nse import Nse
+           db = Nse()
+           #Load OIL Brand Data.
+           data = db.load('OIL')
+           #Linear Grap Of Data
+           db.linear(data)
+           ```
+           ### Output:
+        
+           <div align="center">
+        <img src="https://drive.google.com/uc?export=view&id=1UBXHpzJdWia_b68Pt5yHpve-m16xbfKk" >
+        <p>Linear Graph OIL Brand</p>
+        </div>
+        
+           ## Set Graph Axis Manually
+           `db.bar(data, x="lastUpdateTime", y="open")` Function Is Used For Set Grap Axis Manually. For Example:-
+           ```python
+           from nse import Nse
+           db = Nse()
+           #Load OIL Brand Data.
+           data = db.load('OIL')
+           #Axis Of Linear Grap
+           db.linear(data, x="lastUpdateTime", y="open")
+        
+           #Axis Of Bar Grap
+           db.Bar(data, x="lastUpdateTime", y="open")
+           ```
+        
+        # Historical Data
+        For Get Historical Data Of A Specific Brand Use `db.history(Symbol,StartDate,EndDate)`
+        For Example:-
+        ```python 
+          from nse import Nse
+          db = Nse()
+          Hdata = db.history("OIL","05-03-2020",'07-03-2020')
+          print(Hdata)
+        ```
+        ### Output
+        ```json
+        {
+          "data": [
+            {
+              "Symbol": "OIL",
+              "Series": "EQ",
+              "Date": "05-Mar-2020",
+              "Prev Close": 110.45,
+              "Open Price": 111.6,
+              "High Price": 115.05,
+              "Low Price": 104.45,
+              "Last Price": 105.2,
+              "Close Price": 105.65,
+              "Average Price": 109.03,
+              "Total Traded Quantity": 3377344,
+              "Turnover": 368225832.25,
+              "No. of Trades": 20454,
+              "Deliverable Qty": 585121,
+              "% Dly Qt to Traded Qty": 17.32
+            },
+            {
+              "Symbol": "OIL",
+              "Series": "EQ",
+              "Date": "06-Mar-2020",
+              "Prev Close": 105.65,
+              "Open Price": 102.35,
+              "High Price": 104.7,
+              "Low Price": 101,
+              "Last Price": 102.6,
+              "Close Price": 102,
+              "Average Price": 103.1,
+              "Total Traded Quantity": 1786440,
+              "Turnover": 184181039.95,
+              "No. of Trades": 16145,
+              "Deliverable Qty": 625668,
+              "% Dly Qt to Traded Qty": 35.02
+            }
+          ],
+          "status": 1
+        }
+        ```
+        
+        ## Daily Archives
+        It is Possible To Download Historical Data Using `db.archive(Name,Date)` Function. Make Sure Date Is In This Format `DD-MM-YYYY`.
+        You Can Download Or Analyse These Archives:-  `Bhavcopy, Bhavcopy (PR.zip), VaR Margin Rate files, Daily Volatility Files, Market Activity Report , Security-wise Delivery Position, Margin Trading, Category-wise Turnover , Short Selling, Client Funding, Combined Report, VaR Multiplier files, Security Category files, ALBM Yield Statistics, Extreme Loss Margin, NSE Market Pulse, Close-out Prices` 
+        
+        ### How To Get Archives ?
+        For Every Archive There Is A Uniqe Code For Example For Bhavcopy Use **eqbhav**.
+         List Of All Archive Codes:-
+         ```python
+           from nse import Nse
+           db = Nse()
+           #For List Of All Archives
+           archives = db.archives
+           print(archives)
+        ```
+        ### Output
+        ```json
+        {
+          "eqbhav": "Bhavcopy ",
+          "cmprzip": "Bhavcopy (PR.zip)",
+          "cmvar": "VaR Margin Rate files",
+          "cmvolt": "Daily Volatility Files",
+          "eqmkt": "Market Activity Report ",
+          "eqmto": "Security-wise Delivery Position",
+          "eqmgn": "Margin Trading",
+          "eqcat": "Category-wise Turnover ",
+          "eqshse": "Short Selling",
+          "eqcli": "Client Funding",
+          "combine": "Combined Report",
+          "eqmult": "VaR Multiplier files",
+          "focatg": "Security Category files",
+          "eqalbm": "ALBM Yield Statistics",
+          "eqelm": "Extreme Loss Margin",
+          "eqmonthly": "NSE Market Pulse",
+          "csqr": "Close-out Prices"
+        }
+        ```
+        ## Get Historical Archives
+           Make Sure There Is No Holiday On That Date.
+        ```python
+           from nse import Nse
+           db = Nse()
+           #For Get Bhavcopy Of 05-03-2020
+           bhavcopy = ns.archive('eqbhav','05-03-2020')
+           #For Get Client Funding Of 05-03-2020
+           client_funding = ns.archive('eqcli','05-03-2020')
+        
+           print(bhavcopy)
+        
+        ```
+        Similarly You Can Get Any Archive Provided In List.
+        
+        # Marginal Calculator
+        Marginal Calulator Is A Tool Provided By NSE INDIA For Calulate Your Stocks Value.
+        ### Simple Calculation
+        `db.calculator(Symbol,Quantity)` For Calulate Stock Margin.
+        ```python
+          from nse import Nse
+          db = Nse()
+          # Calculate Margin Of 50 Stocks Of HDFCBANK
+          data = db.calculator("HDFCBANK",50)
+          print(data)
+         ```
+         ### Output
+        ```json
+        {
+          "Traded Value": "55,332.50",
+          "VAR Margin": "8,178.14",
+          "ELM Margin": "1,936.64",
+          "Total Margin": "10,114.78"
+        }
+        ```
+        ### Manual Inputs In Calculator
+        `db.calculator` Function Can Take 5 Arguments. SYMBOL & QUANTITY Are Necessary Argumets And Other Three Arguments You Can Provide Or Values Are Set By Default.
+        List Of Arguments:-
+         1. Symbol (Required)
+         2. Quantity (Required)
+         3.  Type (Set To Buy By Default)
+               - Use `B` For Buy
+               - Use `S` For Sell
+               - For Example:- `db.calculator("OIL",25,"S")` Sell 25 Stocks.
+          4. Price (Automatic According To Brand)
+               - For Manually:- `db.calculator("OIL",25,"S",105.2)` lastPrice Set To 105.2
+         5. Series (By Default Set To "EQ")
+         
+         Use Of Manual Inputs Example:- `db.calculator("OIL",25,"S",105.2,"BQ")`
+        
+        ## Filter Data 
+        This Package Provide Multiple Filters. "String Filter", "OR Filter", "AND Filter ", "LESS THAN", "GREATER THAN",etc
+        
+        ### Simple Filter
+        Import `GT`(Greater Than) Operator Before Use.
+        ```python
+          from nse import Nse, GT
+          db = Nse()
+        
+          # Filter Where lastPrice Is Greater Than 100
+          data = db.filter("HDFCBANK",{"lastPrice":(GT,100)})
+          print(data)
+        
+         ```
+         ### pi7db Database Pacakge
+          `NSE Scraper` Is Build Using [` Pi7db Databse`](https://pypi.org/project/pi7db/). So For Learn About Advance Way Of Filtering data Read Filter Data Section In Pi7db Documentation [Click Here](https://pypi.org/project/pi7db/)
+          Also There Are More Features Like Sort, Trash, Update In `Pi7db`.
+        
+        ## Write CSV
+        For Write Filtered  Data In CSV Use `db.csv_write(DATA,FILENAME)`
+        For Example:-
+        ```python
+          from nse import Nse, GT
+          db = Nse()
+          # Filter Where lastPrice Is Greater Than 100
+          data = db.filter("HDFCBANK",{"lastPrice":(GT,100)})
+         
+          # Write Data To CSV File
+          db.csv_write(data,"Filtered_data.csv")
+         ```
+         ### Get Csv String
+         For Get Csv String Use `db.csv_write(DATA,write=False)`
+        For Example:-
+        ```python
+          from nse import Nse, GT
+          db = Nse()
+          # Filter Where lastPrice Is Greater Than 100
+          data = db.filter("HDFCBANK",{"lastPrice":(GT,100)})
+         
+          # Write Data To CSV File
+          csv_str = db.csv_write(data,write=False)
+          print(csv_str)
+         ```
+         
+        
+        ## Export Data To Pandas
+        Pandas Is A Great Library For Data Anaylsis So For Export Captured Data Or Historical Data In Use `db.pandas(data)`. For Example:-
+        ```python
+          from nse import Nse
+          db = Nse()
+          # Load Oil Brand Data
+          data = db.load("OIL")
+         
+          # Convert To Pandas Dataframe
+          pd = db.pandas(data)
+          print(pd)
+        
+         ```
+        
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Database
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown

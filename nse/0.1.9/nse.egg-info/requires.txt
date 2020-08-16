@@ -1,0 +1,4 @@
+pi7db==0.4
+beautifulsoup4
+pandas
+matplotlib

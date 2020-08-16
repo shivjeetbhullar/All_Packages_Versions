@@ -1,0 +1,3 @@
+pi7db
+beautifulsoup4
+pandas

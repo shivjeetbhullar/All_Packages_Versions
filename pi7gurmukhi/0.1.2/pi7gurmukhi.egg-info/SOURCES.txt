@@ -1,0 +1,8 @@
+README.md
+setup.py
+pi7gurmukhi/__init__.py
+pi7gurmukhi/chars.py
+pi7gurmukhi.egg-info/PKG-INFO
+pi7gurmukhi.egg-info/SOURCES.txt
+pi7gurmukhi.egg-info/dependency_links.txt
+pi7gurmukhi.egg-info/top_level.txt
